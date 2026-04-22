@@ -1,0 +1,111 @@
+/* 全局重置 & 背景 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(145deg, #e0eafc 0%, #cfdef3 100%);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+/* 卡片样式：白色背景，圆角，阴影 */
+.card {
+    background-color: white;          /* 要求1：卡片背景色白色 */
+    max-width: 380px;
+    width: 100%;
+    border-radius: 36px;
+    padding: 2rem 1.8rem;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.25s ease;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* 标题：深色字体，字间距稍宽 */
+h1 {
+    color: #1f2a3e;           /* 深色字体 */
+    letter-spacing: 1.5px;    /* 字间距 */
+    font-size: 1.9rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+/* 段落样式 */
+p {
+    color: #2c3e50;
+    line-height: 1.5;
+    margin: 0.6rem 0;
+    font-size: 0.95rem;
+}
+
+/* 兴趣爱好列表：去掉默认圆点 + 伪元素添加 Emoji */
+.hobby-list {
+    list-style: none;          /* 去掉项目符号 */
+    margin: 1.2rem 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.hobby-list li {
+    font-size: 1rem;
+    background: #f8f9ff;
+    padding: 0.4rem 1rem;
+    border-radius: 40px;
+    color: #1e466e;
+    font-weight: 500;
+}
+
+/* 伪元素 ::before 添加 Emoji */
+.hobby-list li::before {
+    content: "💡 ";    /* 每个列表项前加灯泡图标 */
+    font-size: 1rem;
+}
+
+/* 按钮：渐变背景，圆角，悬停放大 */
+.btn {
+    display: inline-block;
+    background: linear-gradient(95deg, #2563eb, #7c3aed);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.7rem 1.8rem;
+    border-radius: 60px;          /* 大圆角 */
+    font-size: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+.btn:hover {
+    transform: scale(1.05);       /* 悬停放大 */
+    background: linear-gradient(95deg, #1d4ed8, #6d28d9);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* 响应式微调 */
+@media (max-width: 480px) {
+    .card {
+        padding: 1.5rem;
+    }
+    h1 {
+        font-size: 1.5rem;
+        letter-spacing: 0.5px;
+    }
+    .hobby-list li {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.8rem;
+    }
+}
