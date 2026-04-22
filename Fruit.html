@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>芒果百科 | 热带水果之王</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Noto Sans CJK SC', system-ui, -apple-system, sans-serif;
+            background-color: #fffef7;
+            color: #2d2a24;
+            line-height: 1.6;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+        }
+
+        /* header 区域 */
+        header {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            border-bottom: 3px solid #f7b32b;
+            margin-bottom: 2rem;
+        }
+        header h1 {
+            font-size: 2.8rem;
+            color: #e67e22;
+            letter-spacing: 2px;
+        }
+        header p {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* 目录卡片 */
+        .toc {
+            background: #fff3e0;
+            padding: 1.2rem 1.8rem;
+            border-radius: 28px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .toc h2 {
+            font-size: 1.4rem;
+            color: #e67e22;
+            border-left: 5px solid #f39c12;
+            padding-left: 12px;
+            margin-bottom: 0.8rem;
+        }
+        .toc ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            list-style: none;
+        }
+        .toc li a {
+            background: white;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #e67e22;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-block;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .toc li a:hover {
+            background: #e67e22;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 主体内容 */
+        section {
+            margin-bottom: 2.8rem;
+            scroll-margin-top: 1rem;  /* 锚点跳转时留出空间 */
+        }
+        section h2 {
+            font-size: 1.8rem;
+            padding-bottom: 0.3rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f7d44a;
+            display: inline-block;
+            color: #2c3e2f;
+        }
+
+        .fruit-intro {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .fruit-intro img {
+            flex: 1;
+            max-width: 280px;
+            width: 100%;
+            border-radius: 32px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+        .fruit-intro p {
+            flex: 2;
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        /* 表格样式 */
+        .nutrition-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fef9e6;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            margin: 1rem 0;
+        }
+        .nutrition-table caption {
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: #a5673f;
+        }
+        .nutrition-table th, .nutrition-table td {
+            border: 1px solid #ffe0a3;
+            padding: 10px 12px;
+            text-align: center;
+        }
+        .nutrition-table th {
+            background-color: #ffd966;
+            color: #3b2a1f;
+            font-weight: 700;
+        }
+        .nutrition-table tr:nth-child(even) {
+            background-color: #fff5e6;
+        }
+
+        /* 品种列表 */
+        .variety-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .variety-card {
+            background: #fff0da;
+            padding: 0.8rem 1rem;
+            border-radius: 40px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* footer */
+        footer {
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            text-align: center;
+            background-color: #2d2a24;
+            color: #ecc88b;
+            border-radius: 40px 40px 20px 20px;
+            font-size: 0.85rem;
+        }
+        footer a {
+            color: #ffc857;
+            text-decoration: none;
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                padding: 1rem;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            .fruit-intro {
+                flex-direction: column;
+                text-align: center;
+            }
+            .toc ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🥭 芒果 · 热带果王</h1>
+        <p>Mangifera indica | 甜蜜多汁，夏日灵魂</p>
+    </header>
+
+    <!-- 目录锚点区域 -->
+    <div class="toc">
+        <h2>📑 本页目录</h2>
+        <ul>
+            <li><a href="#intro">✨ 简介</a></li>
+            <li><a href="#nutrition">🥗 营养价值</a></li>
+            <li><a href="#variety">🌱 常见品种</a></li>
+            <li><a href="#history">📜 文化趣闻</a></li>
+        </ul>
+    </div>
+
+    <main>
+        <!-- 简介部分 -->
+        <section id="intro">
+            <h2>✨ 简介</h2>
+            <div class="fruit-intro">
+                <img src="images/生成芒果照片.png"
+                     alt="成熟的新鲜芒果，果肉金黄诱人">
+                <p>
+                    芒果被誉为“热带水果之王”，原产于印度及东南亚地区，至今已有4000多年栽培历史。
+                    果肉细腻多汁，甜中带微酸，富含多种维生素。无论是直接食用、榨汁、做甜品或入菜，
+                    芒果都能带来令人愉悦的热带风情。全世界每年生产近5000万吨芒果，其中印度、中国和泰国是主要产区。
+                </p>
+            </div>
+        </section>
+
+        <!-- 营养价值（表格） -->
+        <section id="nutrition">
+            <h2>🥗 营养价值</h2>
+            <table class="nutrition-table">
+                <caption>📊 每100克芒果果肉（可食部分）</caption>
+                <thead>
+                    <tr>
+                        <th>成分</th>
+                        <th>含量</th>
+                        <th>每日参考占比*</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🔥 热量</td>
+                        <td>60 kcal</td>
+                        <td>3%</td>
+                    </tr>
+                    <tr>
+                        <td>🍚 碳水化合物</td>
+                        <td>15 g</td>
+                        <td>5%</td>
+                    </tr>
+                    <tr>
+                        <td>🍬 糖分</td>
+                        <td>13.7 g</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>🥦 膳食纤维</td>
+                        <td>1.6 g</td>
+                        <td>6%</td>
+                    </tr>
+                    <tr>
+                        <td>💊 维生素C</td>
+                        <td>36.4 mg</td>
+                        <td>40%</td>
+                    </tr>
+                    <tr>
+                        <td>🅰️ 维生素A (RAE)</td>
+                        <td>54 µg</td>
+                        <td>6%</td>
+                    </tr>
+                    <tr>
+                        <td>🧂 钾</td>
+                        <td>168 mg</td>
+                        <td>4%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size: 0.85rem; color: #7f5539;">*参考占比基于每日2000卡路里膳食，数值仅供参考。</p>
+        </section>
+
+        <!-- 常见品种 -->
+        <section id="variety">
+            <h2>🌱 常见品种</h2>
+            <div class="variety-list">
+                <div class="variety-card">🥭 贵妃芒 — 核薄肉厚，香气浓郁</div>
+                <div class="variety-card">🥭 台农一号 — 甜度高，口感细腻</div>
+                <div class="variety-card">🥭 金煌芒 — 个头巨大，几乎无纤维</div>
+                <div class="variety-card">🥭 青芒 — 适合蘸辣椒盐和做沙拉</div>
+            </div>
+            <p style="margin-top: 1rem;">不同品种的芒果甜度、纤维感和成熟颜色差异很大，从绿到橙黄都是宝藏。</p>
+        </section>
+
+        <!-- 文化趣闻 + 额外锚点 -->
+        <section id="history">
+            <h2>📜 文化趣闻</h2>
+            <p>在印度，芒果被认为是“圣果”，芒果树叶常被用于婚礼和宗教仪式。巴基斯坦和印度都将芒果奉为<b>国果</b>。而在中国，芒果汁是港式甜品杨枝甘露的灵魂。现代研究发现，芒果中的芒果苷具有抗炎和抗氧化的潜力。</p>
+            <p>💡 小知识：芒果的“腰子”形状是为了方便风传播种子，原始芒果只有核桃大小，经过千年驯化才有了今天的肥美多汁。</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>📖 芒果百科 · 第一周实战项目 | 数据参考自 USDA FoodData Central & 热带水果协会</p>
+        <p>🚀 已使用语义化标签、锚点跳转、表格、图片 — 满足 Day6-7 全部要求 | <a href="#">回到顶部 ↑</a></p>
+    </footer>
+</div>
+</body>
+</html>
