@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的课程表 - Day 4 表格作业</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, 'Helvetica Neue', sans-serif;
+            background: #eef2ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            margin: 0;
+        }
+        .table-wrapper {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
+            padding: 1.5rem 1rem 1.5rem 1rem;
+            overflow-x: auto;
+            width: 100%;
+            max-width: 1100px;
+        }
+        caption {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            caption-side: top;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+            text-align: center;
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 12px 8px;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #1e293b;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f8fafc;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        tbody tr:hover {
+            background-color: #e0f2fe;
+            transition: 0.2s;
+        }
+        .time-col {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .lunch {
+            background-color: #fef9c3;
+            font-weight: bold;
+            color: #854d0e;
+        }
+        .weekend {
+            background-color: #f1f5f9;
+            font-style: italic;
+            color: #64748b;
+        }
+        @media (max-width: 700px) {
+            th, td {
+                padding: 8px 4px;
+                font-size: 0.8rem;
+            }
+            caption {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="table-wrapper">
+    <table>
+        <!-- 表格标题 -->
+        <caption>📚 我的魔鬼训练营课程表</caption>
+
+        <!-- 表头：时间/星期 + 周一到周五 -->
+        <thead>
+            <tr>
+                <th>时间/星期</th>
+                <th>星期一</th>
+                <th>星期二</th>
+                <th>星期三</th>
+                <th>星期四</th>
+                <th>星期五</th>
+            </tr>
+        </thead>
+
+        <!-- 表体：上午、下午、午休合并单元格 -->
+        <tbody>
+            <!-- 第1行：上午 -->
+            <tr>
+                <td class="time-col">上午<br>08:00-12:00</td>
+                <td>前端开发<br>HTML+CSS</td>
+                <td>JavaScript<br>核心语法</td>
+                <td>响应式设计<br>Flex/Grid</td>
+                <td>Git版本控制</td>
+                <td>项目实战<br>静态页面</td>
+            </tr>
+
+            <!-- 第2行：午休（合并5列，从星期一到星期五） -->
+            <tr>
+                <td class="time-col">中午<br>12:00-14:00</td>
+                <td colspan="5" class="lunch">🍱 午休 · 干饭充电时间（colspan=5 合并五列）</td>
+            </tr>
+
+            <!-- 第3行：下午 -->
+            <tr>
+                <td class="time-col">下午<br>14:00-18:00</td>
+                <td>后端入门<br>Node.js</td>
+                <td>数据库<br>SQL基础</td>
+                <td>框架预热<br>Vue基础</td>
+                <td>API设计<br>RESTful</td>
+                <!-- 这里演示 rowspan：周五下午连续两节“全栈项目工作坊”，占第3行和第4行 -->
+                <td rowspan="2">全栈项目工作坊<br>🔥 rowspan=2 跨两行</td>
+            </tr>
+
+            <!-- 第4行：下午第二节（仅用于演示 rowspan，此行的周五单元格已被上一行占用） -->
+            <tr>
+                <td class="time-col">下午<br>加练/答疑<br>18:00-20:00</td>
+                <td>算法练习</td>
+                <td>代码复盘</td>
+                <td>小组讨论</td>
+                <td>自由编码</td>
+                <!-- 周五单元格已经被上面的 rowspan 吃掉，这里不能写 <td>，否则会多出一列 -->
+            </tr>
+        </tbody>
+    </table>
+    <div style="margin-top: 1rem; font-size: 0.8rem; text-align: center; color: #475569;">
+        ✅ 合并单元格考点：午休使用 <code>colspan="5"</code>（横向合并5列）；周五下午使用 <code>rowspan="2"</code>（纵向合并2行）。
+    </div>
+</div>
+</body>
+</html>

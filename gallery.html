@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的相册 - Day 2</title>
+    <style>
+        /* 简单让相册好看一点，不影响作业要求 */
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            background: #f5f7fa;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #1e293b;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        figure {
+            background: white;
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 280px;
+            text-align: center;
+            margin: 0;
+            transition: transform 0.2s;
+        }
+        figure:hover {
+            transform: translateY(-5px);
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+        }
+        figcaption {
+            margin-top: 0.75rem;
+            font-weight: bold;
+        }
+        a {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .note {
+            background: #e6f0ff;
+            padding: 0.75rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>📸 我的相册</h1>
+    <div class="gallery">
+        <!-- 图 1 -->
+        <figure>
+            <img src="https://picsum.photos/id/1015/300/200" alt="山景">
+            <figcaption>🏔️ 壮丽的山峰</figcaption>
+            <a href="https://picsum.photos/id/1015/1200/800" target="_blank" rel="noopener noreferrer">
+                查看大图 🔗
+            </a>
+        </figure>
+
+        <!-- 图 2 -->
+        <figure>
+            <img src="https://picsum.photos/id/104/300/200" alt="湖泊">
+            <figcaption>💧 宁静的湖</figcaption>
+            <a href="https://picsum.photos/id/104/1200/800" target="_blank" rel="noopener noreferrer">
+                查看大图 🔗
+            </a>
+        </figure>
+
+        <!-- 图 3 -->
+        <figure>
+            <img src="https://picsum.photos/id/106/300/200" alt="海岸">
+            <figcaption>🌊 浪漫海岸线</figcaption>
+            <a href="https://picsum.photos/id/106/1200/800" target="_blank" rel="noopener noreferrer">
+                查看大图 🔗
+            </a>
+        </figure>
+    </div>
+    <div class="note">
+        ✅ 作业要求：点击每个“查看大图”链接，会在<strong>新窗口/新标签页</strong>打开大尺寸图片。<br>
+        📌 使用了语义化的 <code>&lt;figure&gt;</code> 和 <code>&lt;figcaption&gt;</code> 标签。
+    </div>
+</body>
+</html>
