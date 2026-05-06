@@ -1,0 +1,64 @@
+/* 全局重置 + 居中布局 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #1e293b;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui, 'Segoe UI', sans-serif;
+}
+
+/* 容器，控制整体居中 */
+.spinner-container {
+    text-align: center;
+}
+
+/* 旋转菊花（圆环） */
+.spinner {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border: 6px solid rgba(255, 255, 255, 0.2);   /* 半透基底 */
+    border-top: 6px solid #facc15;                /* 顶部颜色不同（金色） */
+    border-radius: 50%;                           /* 圆形 */
+    animation: spin 1s linear infinite;           /* 动画：1秒一圈，匀速，无限循环 */
+}
+
+/* 定义旋转动画 */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 可选挑战：文字呼吸闪烁效果 */
+.loading-text {
+    margin-top: 1rem;
+    color: #facc15;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    animation: breath 1.5s ease-in-out infinite;  /* 呼吸动画，无限循环 */
+}
+
+/* 透明度闪烁关键帧 */
+@keyframes breath {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 1;
+    }
+}
