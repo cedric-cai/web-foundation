@@ -1,0 +1,63 @@
+/* 全局重置 + 盒模型统一设置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;  /* 关键：让 width 包含 padding 和 border */
+}
+
+body {
+    font-family: system-ui, 'Segoe UI', sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 父容器：让三个块并排，并且整体居中 */
+.container {
+    display: flex;           /* 使用 flex 布局实现并排 */
+    gap: 20px;              /* 水平间距 20px，比 margin 更干净 */
+    background: white;
+    padding: 2rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* 公共色块样式 */
+.box {
+    width: 200px;           /* 期望总宽度为 200px */
+    height: 150px;          /* 高度 150px */
+    border: 2px solid;      /* 2px 实线边框（颜色各自定义） */
+    padding: 10px;          /* 内边距 10px，检验盒模型 */
+    background-color: #fff;
+    border-radius: 16px;
+    transition: transform 0.2s;
+}
+
+/* 不同边框颜色 */
+.box1 {
+    border-color: #ef4444;  /* 红 */
+    background: #fee2e2;
+}
+.box2 {
+    border-color: #3b82f6;  /* 蓝 */
+    background: #dbeafe;
+}
+.box3 {
+    border-color: #10b981;  /* 绿 */
+    background: #d1fae5;
+}
+
+/* 内部文字样式 */
+.box p {
+    font-weight: bold;
+    text-align: center;
+    line-height: calc(150px - 2*10px - 2*2px); /* 计算垂直居中：高度减去上下padding和边框 */
+    /* 更简单的居中方法：用 flex 撑开，但为了演示 padding 效果，保留上述计算 */
+    /* 上面那行是为了让文字垂直居中，你也可以用更现代的 flex 方式，但无伤大雅 */
+}
+
+/* 如果你想更简单验证 padding 对文字位置的影响，可以这样写：
+   .box { display: flex; align-items: center; justify-content: center; }
+   但为了原汁原味体会 padding，我保留了手动计算。其实 padding 已经让文字内部留白。 */
