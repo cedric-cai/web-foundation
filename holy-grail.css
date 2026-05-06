@@ -1,0 +1,87 @@
+/* 全局重置 + 盒模型 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 页面容器：垂直 Flex 布局，使 footer 沉底 */
+.page-container {
+    display: flex;
+    flex-direction: column;      /* 垂直排列 header、中间区域、footer */
+    min-height: 100vh;           /* 最小高度撑满视口，确保 footer 沉底 */
+}
+
+/* Header 样式（深色背景+白色文字） */
+.header {
+    background-color: #1e293b;
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.header h1 {
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+}
+
+/* 中间区域：水平 Flex 布局（三栏） */
+.middle-container {
+    display: flex;
+    flex: 1;                     /* 占满剩余垂直空间，把 footer 推到最下 */
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;              /* 水平居中（可选） */
+}
+
+/* 主内容区：flex: 1 自动填满剩余宽度 */
+.main-content {
+    flex: 1;                    /* 关键：自动撑满左右侧边栏之间的空间 */
+    background-color: #f8fafc;
+    padding: 1.5rem;
+    order: 2;                   /* 保证视觉上中间，但 HTML 顺序已正确；order 用于微调 */
+}
+
+/* 左侧边栏：固定宽度 220px */
+.left-sidebar {
+    width: 220px;               /* 固定宽度 */
+    background-color: #e2e8f0;
+    padding: 1.5rem;
+    order: 1;                   /* 视觉上左侧，因为 HTML 中 article 在前，这里 order 让其排在前面 */
+}
+
+/* 右侧边栏：固定宽度 300px */
+.right-sidebar {
+    width: 300px;
+    background-color: #cbd5e1;
+    padding: 1.5rem;
+    order: 3;                   /* 右侧 */
+}
+
+/* Footer 深色背景 */
+.footer {
+    background-color: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 1.2rem;
+}
+
+/* 额外挑战：屏幕宽度 < 768px 时，三栏垂直堆叠 */
+@media (max-width: 768px) {
+    .middle-container {
+        flex-direction: column;   /* 垂直排列 */
+    }
+    .left-sidebar,
+    .right-sidebar,
+    .main-content {
+        width: 100%;              /* 撑满宽度 */
+        order: 0;                /* 重置 order，按 HTML 原始顺序：主内容在上，侧边栏在下 */
+    }
+    /* 如果你想调整侧边栏顺序，可以单独设置 order，但本例保持主内容区最先 */
+    .left-sidebar {
+        order: 1;
+    }
+    .right-sidebar {
+        order: 2;
+    }
+}

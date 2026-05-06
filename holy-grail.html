@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 11：Flex 圣杯布局</title>
+    <link rel="stylesheet" href="holy-grail.css">
+</head>
+<body>
+    <!-- 整体容器：垂直 Flex -->
+    <div class="page-container">
+        <header class="header">
+            <h1>圣杯布局 - Flex 版</h1>
+            <p>Header 在上，Footer 沉底</p>
+        </header>
+
+        <!-- 中间区域：三栏水平 Flex（左侧栏、主内容、右侧栏） -->
+        <!-- 注意：HTML 中 article 写在 aside 前面，满足要求 -->
+        <div class="middle-container">
+            <!-- 主内容区：先用 article，自适应宽度 -->
+            <article class="main-content">
+                <h2>主要文章区域</h2>
+                <p>这里是网站的核心内容。使用 <code>flex: 1</code> 自动填满剩余宽度。</p>
+                <p>左侧边栏固定宽度 <strong>220px</strong>；右侧边栏固定宽度 <strong>300px</strong>。</p>
+                <p>得益于 Flex 布局，即使屏幕缩放，中间区域也会自动伸缩，不会挤压侧边栏。</p>
+                <p>并且本布局通过 <code>min-height: 100vh</code> 使 Footer 始终在底部（即使内容很少）。</p>
+            </article>
+
+            <!-- 左侧边栏：<aside>，固定宽度 -->
+            <aside class="left-sidebar">
+                <h3>左侧边栏</h3>
+                <ul>
+                    <li>导航链接 1</li>
+                    <li>导航链接 2</li>
+                    <li>导航链接 3</li>
+                </ul>
+                <p>宽度: 220px</p>
+            </aside>
+
+            <!-- 右侧边栏：<aside>，固定宽度 -->
+            <aside class="right-sidebar">
+                <h3>右侧边栏</h3>
+                <p>广告位或相关文章</p>
+                <p>宽度: 300px</p>
+            </aside>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 我的圣杯布局 | 使用 Flex 实现 | Footer 始终沉底</p>
+        </footer>
+    </div>
+</body>
+</html>
