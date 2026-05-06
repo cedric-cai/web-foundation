@@ -1,0 +1,85 @@
+/* 全局重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(145deg, #2c3e50, #1a2632);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui, 'Segoe UI', sans-serif;
+}
+
+/* 卡片容器：提供 3D 透视 */
+.card-container {
+    perspective: 1000px;          /* 关键：为 3D 变换添加透视感 */
+    width: 300px;
+    height: 300px;
+}
+
+/* 内部翻转体 */
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s ease;   /* 过渡时长 + 缓动 */
+    transform-style: preserve-3d;       /* 保留子元素的 3D 空间 */
+    border-radius: 24px;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3);
+}
+
+/* 悬停时旋转 */
+.card-container:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* 正面和背面通用样式 */
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;    /* 隐藏背面，避免反面透视 */
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* 正面：图片占满 */
+.card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 背面样式：深色背景，白色文字 */
+.card-back {
+    background: #1e293b;
+    color: white;
+    transform: rotateY(180deg);      /* 预先旋转180度，让初始时背面朝后 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    text-align: center;
+    gap: 0.8rem;
+}
+
+.card-back h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 2px solid #facc15;
+    display: inline-block;
+}
+
+.card-back p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #e2e8f0;
+}
