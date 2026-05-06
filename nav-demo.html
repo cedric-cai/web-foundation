@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 10：固定导航栏 + 返回顶部按钮</title>
+    <link rel="stylesheet" href="nav-demo.css">
+</head>
+<body>
+
+    <!-- 固定导航栏 -->
+    <header class="navbar">
+        <nav>
+            <ul>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">关于</a></li>
+                <li><a href="#">服务</a></li>
+                <li><a href="#">联系</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 主要内容容器（避开导航栏高度） -->
+    <main class="content">
+        <h1>滚动页面演示</h1>
+        <p>导航栏使用 <code>position: fixed</code>，始终吸附在顶部。<br>
+        右下角有一个“返回顶部”按钮，使用 <code>position: fixed</code>，点击后可平滑滚动回顶部。</p>
+        
+        <!-- 用大量色块占位，确保滚动条出现 -->
+        <div class="placeholder-block" style="background:#f8d7da;">区块 1</div>
+        <div class="placeholder-block" style="background:#d4edda;">区块 2</div>
+        <div class="placeholder-block" style="background:#d1ecf1;">区块 3</div>
+        <div class="placeholder-block" style="background:#fff3cd;">区块 4</div>
+        <div class="placeholder-block" style="background:#e2d1ff;">区块 5</div>
+        <div class="placeholder-block" style="background:#fbc4c4;">区块 6</div>
+        <div class="placeholder-block" style="background:#b8e0ff;">区块 7</div>
+        <div class="placeholder-block" style="background:#c3e6cb;">区块 8</div>
+        <div class="placeholder-block" style="background:#ffe1b3;">区块 9</div>
+        <div class="placeholder-block" style="background:#d5b8ff;">区块 10</div>
+    </main>
+
+    <!-- 返回顶部按钮（固定定位） -->
+    <button id="backToTopBtn" class="back-to-top" title="返回顶部">⬆️ 顶部</button>
+
+    <!-- 平滑滚动的小脚本（原生JS，简单实现） -->
+    <script>
+        const backBtn = document.getElementById('backToTopBtn');
+        backBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
