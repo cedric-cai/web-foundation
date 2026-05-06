@@ -1,0 +1,100 @@
+/* 全局重置 + 盒模型 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(145deg, #2c3e50, #1a2632);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui, 'Segoe UI', 'Noto Sans', sans-serif;
+}
+
+/* 计算器外壳 */
+.calculator {
+    background: #1f2937;  /* 降级纯色 */
+    background: rgba(31, 41, 55, 0.9);
+    border-radius: 2rem;
+    padding: 1.5rem;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 420px;
+}
+
+/* 简易显示屏 */
+.display {
+    background: #0f172a;
+    color: #facc15;
+    font-size: 2.5rem;
+    font-weight: 500;
+    text-align: right;
+    padding: 0.8rem 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    font-family: monospace;
+    letter-spacing: 2px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* 按钮网格容器 */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);   /* 4列等宽，每份1fr */
+    gap: 12px;                               /* 按钮之间的间隙 */
+}
+
+/* 公共按钮样式 */
+.btn {
+    background: #374151;    /* 降级纯色 */
+    background: rgba(55, 65, 81, 0.9);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: none;
+    padding: 1rem 0;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* 悬停效果：变色 + 轻微放大 */
+.btn:hover {
+    background: #4b5563;
+    background: rgba(75, 85, 99, 0.95);
+    transform: scale(1.02);
+}
+
+/* 运算符按钮稍微不同色调（可选） */
+.operator {
+    background: #6b21a5;
+    background: rgba(107, 33, 165, 0.9);
+}
+.operator:hover {
+    background: #7e22ce;
+    transform: scale(1.02);
+}
+
+/* 关键点：0 按钮跨越两列 */
+.zero {
+    grid-column: span 2;   /* 横跨2列，占据第1列和第2列的位置 */
+}
+
+/* 响应式：小屏幕适当缩小按钮内边距 */
+@media (max-width: 480px) {
+    .calculator {
+        padding: 1rem;
+    }
+    .btn {
+        padding: 0.7rem 0;
+        font-size: 1.2rem;
+    }
+    .display {
+        font-size: 2rem;
+    }
+}
