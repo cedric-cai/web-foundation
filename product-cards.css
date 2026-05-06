@@ -1,0 +1,142 @@
+/* ========== CSS 变量定义（主题色管理） ========== */
+:root {
+    --primary-color: #0071e3;      /* 苹果蓝 */
+    --primary-hover: #005bb5;
+    --card-bg: #ffffff;
+    --body-bg: #f5f5f7;
+    --text-dark: #1d1d1f;
+    --text-light: #6e6e73;
+    --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 20px 35px -10px rgba(0, 0, 0, 0.2);
+    --border-radius: 24px;
+    --transition-speed: 0.3s;
+}
+
+/* 全局重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--body-bg);
+    font-family: system-ui, -apple-system, 'Segoe UI', 'Noto Sans CJK SC', sans-serif;
+    line-height: 1.4;
+    padding: 2rem 1.5rem;
+}
+
+/* 整体容器 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 页面标题 */
+.page-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+}
+
+/* 卡片网格：使用 Grid 实现三列并排 */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+/* 卡片样式 */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-speed) cubic-bezier(0.2, 0, 0, 1);
+    cursor: pointer;
+}
+
+/* 悬停效果：上浮 + 加深阴影 */
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* 图片容器（用于实现图片放大溢出裁剪） */
+.card-img-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* 可选挑战：图片悬停放大效果 */
+.card:hover .card-img-wrapper img {
+    transform: scale(1.05);
+}
+
+/* 卡片内容区 */
+.card-content {
+    padding: 1.2rem 1.2rem 1.5rem;
+}
+
+.product-name {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.3rem;
+}
+
+.product-desc {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 0.8rem;
+}
+
+.price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0.8rem 0 1rem;
+}
+
+/* 购买按钮 */
+.buy-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.buy-btn:hover {
+    background: var(--primary-hover);
+    transform: scale(0.98);
+}
+
+/* ========== 响应式设计：小于 768px 卡片垂直堆叠 ========== */
+@media (max-width: 768px) {
+    .cards-grid {
+        grid-template-columns: 1fr;   /* 变成单列 */
+        gap: 1.5rem;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    .page-title {
+        font-size: 1.8rem;
+    }
+}
