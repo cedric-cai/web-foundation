@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 18：CSS 计数器 + 变量 - 章节自动编号</title>
+    <style>
+        /* ========== CSS 变量定义 (统一管理主题色) ========== */
+        :root {
+            --primary-color: #3b82f6;      /* 主色调：蓝色 */
+            --primary-dark: #2563eb;
+            --secondary-color: #f59e0b;    /* 强调色：橙色 */
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Noto Sans CJK SC', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* 主容器：重置章节计数器 */
+        .book {
+            counter-reset: chapter;   /* 重置章计数器 */
+        }
+
+        /* 每一章 */
+        .chapter {
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1.2rem;
+            counter-reset: section;   /* 每章内重置节计数器 */
+        }
+
+        /* 章标题：使用计数器 + ::before */
+        .chapter-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .chapter-title::before {
+            counter-increment: chapter;               /* 章计数+1 */
+            content: "第 " counter(chapter) " 章 · "; /* 显示“第 X 章 ·” */
+            color: var(--secondary-color);
+            font-weight: normal;
+        }
+
+        /* 节标题容器 */
+        .section {
+            margin-bottom: 1rem;
+            counter-increment: section;               /* 节计数+1 */
+        }
+
+        /* 节标题样式 */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* 节标题前的编号：显示“X.Y”格式 */
+        .section-title::before {
+            content: counter(chapter) "." counter(section) "  ";
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        /* 小节（可选，展示三级编号） */
+        .subsection {
+            counter-increment: subsection;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        .subsection-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #4b5563;
+        }
+        .subsection-title::before {
+            content: counter(chapter) "." counter(section) "." counter(subsection) " ";
+            color: var(--secondary-color);
+        }
+
+        /* 段落样式 */
+        p {
+            margin: 0.5rem 0 0.8rem 1.5rem;
+            color: #334155;
+        }
+
+        hr {
+            margin: 2rem 0;
+            border-color: var(--border-color);
+        }
+
+        /* 演示：切换主题色按钮（仅用于展示变量动态修改） */
+        .theme-switch {
+            margin-bottom: 2rem;
+            text-align: right;
+        }
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: var(--primary-dark);
+        }
+        /* 暗色主题类（切换演示） */
+        .dark-theme {
+            --primary-color: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --secondary-color: #f97316;
+            --bg-light: #1e293b;
+            --text-dark: #f1f5f9;
+            --border-color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switch">
+        <button id="toggleTheme">🌓 切换暗色主题（演示 CSS 变量）</button>
+    </div>
+    <div class="book" id="book">
+        <!-- 第一章 -->
+        <div class="chapter">
+            <h2 class="chapter-title">CSS 基础</h2>
+            <div class="section">
+                <h3 class="section-title">盒模型</h3>
+                <p>盒模型由 content、padding、border、margin 组成。box-sizing: border-box 可以避免宽度溢出。</p>
+            </div>
+            <div class="section">
+                <h3 class="section-title">选择器优先级</h3>
+                <p>ID 选择器 > 类选择器 > 标签选择器，行内样式权重大于内部样式表。</p>
+                <div class="subsection">
+                    <h4 class="subsection-title">伪类与伪元素</h4>
+                    <p>:hover, ::before, ::after 是常用的伪类和伪元素。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二章 -->
+        <div class="chapter">
+            <h2 class="chapter-title">布局进阶</h2>
+            <div class="section">
+                <h3 class="section-title">Flex 弹性布局</h3>
+                <p>使用 display: flex 可以轻松实现一维布局，justify-content 和 align-items 控制主轴和交叉轴对齐。</p>
+            </div>
+            <div class="section">
+                <h3 class="section-title">Grid 网格布局</h3>
+                <p>Grid 是二维布局系统，fr 单位用于分配剩余空间，适合复杂页面结构。</p>
+                <div class="subsection">
+                    <h4 class="subsection-title">grid-template-areas</h4>
+                    <p>通过命名区域可以直观定义布局模板。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第三章 -->
+        <div class="chapter">
+            <h2 class="chapter-title">响应式设计</h2>
+            <div class="section">
+                <h3 class="section-title">媒体查询</h3>
+                <p>使用 @media 可以根据屏幕宽度应用不同样式，移动优先是常见策略。</p>
+            </div>
+            <div class="section">
+                <h3 class="section-title">相对单位</h3>
+                <p>rem、em、vw、vh 让布局更适应不同屏幕尺寸。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 演示通过修改 CSS 变量来切换主题色（不需要额外知识点，仅展示变量的灵活性）
+        const toggleBtn = document.getElementById('toggleTheme');
+        const bookDiv = document.getElementById('book');
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            toggleBtn.textContent = document.body.classList.contains('dark-theme') ? '☀️ 切换亮色主题' : '🌓 切换暗色主题';
+        });
+    </script>
+</body>
+</html>
