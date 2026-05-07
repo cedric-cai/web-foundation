@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 11 响应式改造：圣杯布局 (移动优先)</title>
+    <style>
+        /* ========== 全局重置 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            line-height: 1.5;
+            background: #f1f5f9;
+        }
+
+        /* ========== 移动端默认样式 (屏幕宽度 < 768px) ========== */
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background-color: #1e293b;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* 中间区域：移动端默认垂直堆叠 */
+        .middle-container {
+            display: flex;
+            flex-direction: column;   /* 垂直堆叠 */
+            flex: 1;
+        }
+
+        /* 所有栏位移动端通用样式 */
+        .main-content,
+        .left-sidebar,
+        .right-sidebar {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 12px;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            background-color: #f8fafc;
+            order: 0;   /* 保持内容优先 */
+        }
+
+        /* 左侧边栏 */
+        .left-sidebar {
+            background-color: #e2e8f0;
+            width: 100%;      /* 移动端占满宽度 */
+        }
+
+        /* 右侧边栏 */
+        .right-sidebar {
+            background-color: #cbd5e1;
+            width: 100%;      /* 移动端占满宽度 */
+        }
+
+        /* 移动端字号缩小 */
+        .main-content h2 {
+            font-size: 1.3rem;
+        }
+        .main-content p,
+        .left-sidebar p,
+        .right-sidebar p {
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* ========== 桌面端样式 (屏幕宽度 ≥ 768px) ========== */
+        @media (min-width: 768px) {
+            /* 中间区域改为水平排列 */
+            .middle-container {
+                flex-direction: row;      /* 水平排列 */
+                max-width: 1400px;
+                margin: 0 auto;
+                gap: 0;                  /* 间隙由内部边距控制 */
+            }
+
+            /* 主内容区：自适应宽度 */
+            .main-content {
+                flex: 1;                 /* 填满剩余空间 */
+                margin: 0;
+                border-radius: 0;
+            }
+
+            /* 左侧边栏：固定宽度 220px */
+            .left-sidebar {
+                width: 220px;
+                margin: 0;
+                order: 1;               /* 视觉上左侧 */
+                border-radius: 0;
+            }
+
+            /* 右侧边栏：固定宽度 300px */
+            .right-sidebar {
+                width: 300px;
+                margin: 0;
+                order: 3;               /* 视觉上右侧 */
+                border-radius: 0;
+            }
+
+            /* 调整三栏之间的间隙（可选，添加内边距或边框） */
+            .left-sidebar, .main-content, .right-sidebar {
+                padding: 1.5rem;
+            }
+
+            /* 恢复桌面端字号 */
+            .main-content h2 {
+                font-size: 1.8rem;
+            }
+            .main-content p,
+            .left-sidebar p,
+            .right-sidebar p {
+                font-size: 1rem;
+            }
+
+            /* Header 和 Footer 桌面端内边距加大 */
+            .header {
+                padding: 1.5rem;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .footer {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="header">
+            <h1>响应式圣杯布局</h1>
+            <p>移动优先 → 垂直堆叠 | 桌面端 → 三栏并排</p>
+        </header>
+
+        <div class="middle-container">
+            <!-- 主内容区（article）在 HTML 中写在侧边栏前面 -->
+            <article class="main-content">
+                <h2>主要文章区域</h2>
+                <p>这是使用移动优先策略改造的圣杯布局。在屏幕宽度小于 768px 时，三个区域垂直堆叠；在 768px 及以上时，恢复为经典的左侧栏（220px）、中间自适应、右侧栏（300px）布局。</p>
+                <p>使用 <code>flex-direction: column</code> 作为移动端默认值，通过 <code>@media (min-width: 768px)</code> 改为 <code>row</code>，实现了响应式切换。</p>
+            </article>
+
+            <aside class="left-sidebar">
+                <h3>左侧边栏</h3>
+                <ul>
+                    <li>导航链接 1</li>
+                    <li>导航链接 2</li>
+                    <li>导航链接 3</li>
+                </ul>
+                <p>移动端宽度 100%<br>桌面端宽度 220px</p>
+            </aside>
+
+            <aside class="right-sidebar">
+                <h3>右侧边栏</h3>
+                <p>广告位或相关文章</p>
+                <p>移动端宽度 100%<br>桌面端宽度 300px</p>
+            </aside>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 响应式圣杯布局 | 移动优先 + Flex | 媒体查询断点 768px</p>
+        </footer>
+    </div>
+</body>
+</html>
