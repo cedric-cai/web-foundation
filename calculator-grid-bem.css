@@ -1,0 +1,109 @@
+/* ========== 全局重置 & 变量 ========== */
+:root {
+    --bg-calc: #1f2937;
+    --display-bg: #0f172a;
+    --key-bg: #374151;
+    --key-hover: #4b5563;
+    --operator-bg: #6b21a5;
+    --operator-hover: #7e22ce;
+    --text-light: #facc15;
+    --text-white: #ffffff;
+    --radius: 1rem;
+    --gap: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(145deg, #2c3e50, #1a2632);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui, 'Segoe UI', sans-serif;
+}
+
+/* ========== 计算器组件 (BEM) ========== */
+/* Block: 计算器外壳 */
+.calculator {
+    background: var(--bg-calc);
+    border-radius: 2rem;
+    padding: 1.5rem;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Element: 显示屏 */
+.calculator__display {
+    background: var(--display-bg);
+    color: var(--text-light);
+    font-size: 2.5rem;
+    font-weight: 500;
+    text-align: right;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    font-family: monospace;
+    letter-spacing: 2px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Element: 按键面板（Grid 布局） */
+.calculator__keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap);
+}
+
+/* Element: 通用按键 */
+.calculator__key {
+    background: var(--key-bg);
+    color: var(--text-white);
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: none;
+    padding: 1rem 0;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.calculator__key:hover {
+    background: var(--key-hover);
+    transform: scale(1.02);
+}
+
+/* Modifier: 运算符键 */
+.calculator__key--operator {
+    background: var(--operator-bg);
+}
+
+.calculator__key--operator:hover {
+    background: var(--operator-hover);
+}
+
+/* Modifier: 零键（跨两列） */
+.calculator__key--zero {
+    grid-column: span 2;
+}
+
+/* 响应式 */
+@media (max-width: 480px) {
+    .calculator {
+        padding: 1rem;
+    }
+    .calculator__key {
+        padding: 0.7rem 0;
+        font-size: 1.2rem;
+    }
+    .calculator__display {
+        font-size: 2rem;
+    }
+}

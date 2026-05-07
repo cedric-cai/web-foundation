@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>翻转卡片 - BEM 重构版</title>
+    <link rel="stylesheet" href="flip-card-bem.css">
+</head>
+<body>
+    <div class="flip-card">
+        <div class="flip-card__inner">
+            <!-- 正面 -->
+            <div class="flip-card__front">
+                <img src="https://picsum.photos/id/104/300/300" alt="湖畔风景">
+            </div>
+            <!-- 背面 -->
+            <div class="flip-card__back">
+                <h3 class="flip-card__title">宁静的湖畔</h3>
+                <p class="flip-card__text">这张图片来自 picsum 免费图库。背面的文字描述可以介绍这张图片的由来或情感。</p>
+                <p class="flip-card__text">使用 CSS 3D 翻转效果，悬停即可看到背面内容。</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

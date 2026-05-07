@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品卡片 - BEM 重构版</title>
+    <link rel="stylesheet" href="product-cards-bem.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">✨ 精选好物 ✨</h1>
+        <div class="products">
+            <!-- 卡片 1 -->
+            <div class="product-card">
+                <div class="product-card__image-wrapper">
+                    <img class="product-card__image" src="https://picsum.photos/id/20/400/300" alt="极简时光腕表">
+                </div>
+                <div class="product-card__content">
+                    <h3 class="product-card__title">极简时光腕表</h3>
+                    <p class="product-card__desc">意大利牛皮表带，蓝宝石玻璃</p>
+                    <div class="product-card__price">¥1,299</div>
+                    <button class="product-card__btn">立即购买 →</button>
+                </div>
+            </div>
+            <!-- 卡片 2 -->
+            <div class="product-card">
+                <div class="product-card__image-wrapper">
+                    <img class="product-card__image" src="https://picsum.photos/id/30/400/300" alt="灵动降噪耳机">
+                </div>
+                <div class="product-card__content">
+                    <h3 class="product-card__title">灵动降噪耳机</h3>
+                    <p class="product-card__desc">主动降噪，30小时续航</p>
+                    <div class="product-card__price">¥899</div>
+                    <button class="product-card__btn">立即购买 →</button>
+                </div>
+            </div>
+            <!-- 卡片 3（特色） -->
+            <div class="product-card product-card--featured">
+                <div class="product-card__image-wrapper">
+                    <img class="product-card__image" src="https://picsum.photos/id/96/400/300" alt="活力运动手环">
+                </div>
+                <div class="product-card__content">
+                    <h3 class="product-card__title">活力运动手环</h3>
+                    <p class="product-card__desc">心率监测，50米防水</p>
+                    <div class="product-card__price">¥399</div>
+                    <button class="product-card__btn">立即购买 →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
