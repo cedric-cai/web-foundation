@@ -1,0 +1,194 @@
+/* ========== CSS 变量（主题色管理） ========== */
+:root {
+    --color-bg: #ffffff;
+    --color-card-bg: #ffffff;
+    --color-text-primary: #24292f;
+    --color-text-secondary: #57606a;
+    --color-border: #d0d7de;
+    --color-input-bg: #ffffff;
+    --color-input-focus: #0969da;
+    --color-btn-bg: #2da44e;
+    --color-btn-hover: #2c974b;
+    --color-btn-text: #ffffff;
+    --color-link: #0969da;
+    --color-required: #cf222e;
+    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.05);
+    --radius-card: 8px;
+    --radius-input: 6px;
+    --spacing-card: 2rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f6f8fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* ========== 登录卡片组件 (BEM) ========== */
+.login {
+    width: 100%;
+    max-width: 360px;
+}
+
+.login__card {
+    background: var(--color-card-bg);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-card);
+    border: 1px solid var(--color-border);
+}
+
+/* 品牌区域 */
+.login__brand {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login__logo {
+    width: 48px;
+    height: 48px;
+    color: var(--color-text-primary);
+    margin-bottom: 0.8rem;
+}
+
+.login__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.login__subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+/* 表单区域 */
+.login__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.login__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.login__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.login__required {
+    color: var(--color-required);
+    font-weight: normal;
+    font-size: 0.8rem;
+}
+
+.login__input {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: var(--color-input-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login__input:focus {
+    outline: none;
+    border-color: var(--color-input-focus);
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+}
+
+.login__input:focus-visible {
+    outline: 2px solid var(--color-input-focus);
+    outline-offset: 0;
+}
+
+.login__forgot {
+    font-size: 0.75rem;
+    color: var(--color-link);
+    text-decoration: none;
+    align-self: flex-end;
+}
+
+.login__forgot:hover {
+    text-decoration: underline;
+}
+
+.login__button {
+    background: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    border: none;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-input);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.05s;
+    margin-top: 0.25rem;
+}
+
+.login__button:hover {
+    background: var(--color-btn-hover);
+}
+
+.login__button:active {
+    transform: scale(0.98);
+}
+
+/* 底部链接 */
+.login__footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.login__footer a {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+.login__footer a:hover {
+    text-decoration: underline;
+}
+
+/* ========== 响应式设计 (移动端) ========== */
+@media (max-width: 540px) {
+    :root {
+        --spacing-card: 1.25rem;
+    }
+    .login__card {
+        border-radius: 12px;
+    }
+    .login__title {
+        font-size: 1.25rem;
+    }
+    .login__input {
+        padding: 0.5rem 0.7rem;
+    }
+}
