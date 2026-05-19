@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>随机名言生成器 | 综合实战</title>
+    <style>
+        /* ========== CSS 变量 ========== */
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+            --radius-lg: 32px;
+            --radius-md: 20px;
+            --transition: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Noto Sans CJK SC', -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        /* ========== 主容器 ========== */
+        .quote-app {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        /* 卡片组件 */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(2px);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .card__header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .card__title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .card__sub {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        /* 名言显示区域 */
+        .quote-display {
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            padding: 2rem 1.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: opacity var(--transition);
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .quote-display__text {
+            font-size: 1.6rem;
+            line-height: 1.5;
+            color: var(--text-dark);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            quotes: "“" "”" "‘" "’";
+        }
+
+        .quote-display__text::before {
+            content: "“";
+            font-size: 2rem;
+            color: var(--primary);
+            opacity: 0.5;
+            margin-right: 0.2rem;
+        }
+
+        .quote-display__text::after {
+            content: "”";
+            font-size: 2rem;
+            color: var(--primary);
+            opacity: 0.5;
+            margin-left: 0.2rem;
+            vertical-align: top;
+        }
+
+        .quote-display__author {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* 按钮组 */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn--primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn--primary:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        .btn--secondary {
+            background: #e2e8f0;
+            color: var(--text-dark);
+        }
+
+        .btn--secondary:hover {
+            background: #cbd5e1;
+            transform: scale(1.02);
+        }
+
+        /* 历史记录区域 */
+        .history-section {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .history-section__title {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            list-style: none;
+        }
+
+        .history-list__item {
+            background: #f1f5f9;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-list__item:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .history-empty {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            padding: 0.5rem 0;
+        }
+
+        /* 淡入淡出动画 */
+        .fade-out {
+            opacity: 0;
+        }
+
+        .fade-in {
+            opacity: 1;
+        }
+
+        /* 响应式 */
+        @media (max-width: 550px) {
+            .card {
+                padding: 1.5rem;
+            }
+            .quote-display__text {
+                font-size: 1.2rem;
+            }
+            .btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+            .history-list__item {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-app">
+        <div class="card">
+            <div class="card__header">
+                <h1 class="card__title">✨ 随机名言生成器</h1>
+                <p class="card__sub">每一条智慧，都值得被看见</p>
+            </div>
+
+            <!-- 名言显示区域（带淡入淡出效果） -->
+            <div id="quoteDisplay" class="quote-display">
+                <div class="quote-display__text" id="quoteText">加载中...</div>
+                <div class="quote-display__author" id="quoteAuthor">——  ——</div>
+            </div>
+
+            <!-- 按钮组 -->
+            <div class="button-group">
+                <button id="randomBtn" class="btn btn--primary">🎲 随机换一条</button>
+                <button id="copyBtn" class="btn btn--secondary">📋 复制名言</button>
+            </div>
+
+            <!-- 历史记录区域 -->
+            <div class="history-section">
+                <div class="history-section__title">
+                    📜 最近查看
+                </div>
+                <ul id="historyList" class="history-list">
+                    <li class="history-empty">暂无历史记录，点击随机按钮开始</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 名言库（10+ 条） ==========
+        const quotes = [
+            { text: "生活就像一盒巧克力，你永远不知道下一颗是什么味道。", author: "《阿甘正传》" },
+            { text: "要么你主宰生活，要么你被生活主宰。", author: "吉姆·罗恩" },
+            { text: "不要等待机会，而要创造机会。", author: "乔治·伯纳德·肖" },
+            { text: "成功的秘诀在于坚持自己的目标和信念。", author: "本杰明·迪斯雷利" },
+            { text: "行动是通往知识的唯一道路。", author: "萧伯纳" },
+            { text: "改变你的想法，你就改变了你的世界。", author: "诺曼·文森特·皮尔" },
+            { text: "未来属于那些相信梦想之美的人。", author: "埃莉诺·罗斯福" },
+            { text: "不要看你失去了什么，要看你剩下什么。", author: "力克·胡哲" },
+            { text: "每一天都是一个新的开始。", author: "未知" },
+            { text: "你的时间有限，不要浪费于重复他人的生活。", author: "史蒂夫·乔布斯" },
+            { text: "伟大工作的唯一途径是热爱你所做的事。", author: "史蒂夫·乔布斯" },
+            { text: "做你自己，其他角色都已经有人了。", author: "奥斯卡·王尔德" }
+        ];
+
+        // ========== 状态变量 ==========
+        let currentIndex = 0;          // 当前显示的索引
+        let historyList = [];           // 存储 { text, author, index } 最多5条
+        const MAX_HISTORY = 5;
+
+        // DOM 元素
+        const quoteDisplayDiv = document.getElementById('quoteDisplay');
+        const quoteTextEl = document.getElementById('quoteText');
+        const quoteAuthorEl = document.getElementById('quoteAuthor');
+        const randomBtn = document.getElementById('randomBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const historyListEl = document.getElementById('historyList');
+
+        // ========== 辅助函数 ==========
+        // 更新页面名言显示（带淡入淡出动画）
+        function updateDisplayWithAnimation(quote, author) {
+            // 先淡出
+            quoteDisplayDiv.classList.add('fade-out');
+            setTimeout(() => {
+                // 更新文字
+                quoteTextEl.textContent = quote;
+                quoteAuthorEl.textContent = `—— ${author} ——`;
+                // 淡入
+                quoteDisplayDiv.classList.remove('fade-out');
+                quoteDisplayDiv.classList.add('fade-in');
+                setTimeout(() => {
+                    quoteDisplayDiv.classList.remove('fade-in');
+                }, 300);
+            }, 200);
+        }
+
+        // 直接更新显示（无动画，用于初始化）
+        function updateDisplayDirect(quote, author) {
+            quoteTextEl.textContent = quote;
+            quoteAuthorEl.textContent = `—— ${author} ——`;
+        }
+
+        // 更新历史记录 UI
+        function renderHistory() {
+            if (!historyListEl) return;
+            if (historyList.length === 0) {
+                historyListEl.innerHTML = '<li class="history-empty">暂无历史记录，点击随机按钮开始</li>';
+                return;
+            }
+            const fragment = document.createDocumentFragment();
+            historyList.forEach((item, idx) => {
+                const li = document.createElement('li');
+                li.className = 'history-list__item';
+                // 截断过长文字
+                let displayText = item.text.length > 25 ? item.text.slice(0, 22) + '...' : item.text;
+                li.textContent = `${displayText} —— ${item.author}`;
+                li.setAttribute('data-history-index', idx);
+                li.setAttribute('data-quote-index', item.index);
+                li.style.cursor = 'pointer';
+                li.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const targetIdx = parseInt(li.getAttribute('data-quote-index'), 10);
+                    if (!isNaN(targetIdx) && quotes[targetIdx]) {
+                        // 点击历史记录，切换到该名言（不重复记录到历史？这里点击也加入历史体验更好，但避免立即重复）
+                        const selectedQuote = quotes[targetIdx];
+                        currentIndex = targetIdx;
+                        updateDisplayWithAnimation(selectedQuote.text, selectedQuote.author);
+                        addToHistory(currentIndex, selectedQuote.text, selectedQuote.author);
+                        console.log(`📜 从历史点击: ${selectedQuote.text}`);
+                    }
+                });
+                fragment.appendChild(li);
+            });
+            historyListEl.innerHTML = '';
+            historyListEl.appendChild(fragment);
+        }
+
+        // 添加到历史记录（去重、限制长度）
+        function addToHistory(index, text, author) {
+            // 防止连续重复：如果最新一条和当前要添加的内容相同，则不重复添加
+            if (historyList.length > 0 && historyList[0].index === index) {
+                return;
+            }
+            const newRecord = { index, text, author, timestamp: Date.now() };
+            // 插入到数组头部
+            historyList = [newRecord, ...historyList];
+            // 限制长度
+            if (historyList.length > MAX_HISTORY) {
+                historyList = historyList.slice(0, MAX_HISTORY);
+            }
+            renderHistory();
+            // 可选：保存到 localStorage（持久化历史）
+            try {
+                localStorage.setItem('quoteHistory', JSON.stringify(historyList));
+            } catch(e) { /* 静默失败 */ }
+        }
+
+        // 加载历史记录
+        function loadHistoryFromStorage() {
+            try {
+                const stored = localStorage.getItem('quoteHistory');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed)) {
+                        historyList = parsed.slice(0, MAX_HISTORY);
+                        renderHistory();
+                    }
+                }
+            } catch(e) { /* 忽略 */ }
+        }
+
+        // 随机获取不重复的名言索引
+        function getRandomDifferentIndex(currentIdx) {
+            if (quotes.length === 1) return 0;
+            let newIdx;
+            do {
+                newIdx = Math.floor(Math.random() * quotes.length);
+            } while (newIdx === currentIdx);
+            return newIdx;
+        }
+
+        // 随机切换名言
+        function randomQuote() {
+            const newIndex = getRandomDifferentIndex(currentIndex);
+            const newQuote = quotes[newIndex];
+            currentIndex = newIndex;
+            // 添加淡入淡出动画
+            updateDisplayWithAnimation(newQuote.text, newQuote.author);
+            // 添加历史记录
+            addToHistory(currentIndex, newQuote.text, newQuote.author);
+            console.log(`🎲 随机切换: ${newQuote.text} — ${newQuote.author}`);
+        }
+
+        // 复制到剪贴板
+        async function copyCurrentQuote() {
+            const currentQuote = quotes[currentIndex];
+            if (!currentQuote) return;
+            const copyText = `“${currentQuote.text}” —— ${currentQuote.author}`;
+            try {
+                await navigator.clipboard.writeText(copyText);
+                alert('✅ 名言已复制到剪贴板！');
+                console.log('📋 复制成功:', copyText);
+            } catch (err) {
+                console.error('复制失败:', err);
+                alert('❌ 复制失败，请手动复制');
+            }
+        }
+
+        // ========== 初始化 ==========
+        function init() {
+            // 随机初始名言（避免总是第一条）
+            const randomInitIndex = Math.floor(Math.random() * quotes.length);
+            currentIndex = randomInitIndex;
+            const initQuote = quotes[currentIndex];
+            updateDisplayDirect(initQuote.text, initQuote.author);
+            
+            // 加载历史记录
+            loadHistoryFromStorage();
+            // 如果历史记录为空，则将当前名言加入历史
+            if (historyList.length === 0) {
+                addToHistory(currentIndex, initQuote.text, initQuote.author);
+            } else {
+                // 确保历史记录渲染
+                renderHistory();
+            }
+
+            // 绑定事件
+            randomBtn.addEventListener('click', randomQuote);
+            copyBtn.addEventListener('click', copyCurrentQuote);
+
+            console.log('========== 随机名言生成器已启动 ==========');
+            console.log(`📚 名言库共 ${quotes.length} 条`);
+            console.log(`✨ 初始名言: ${initQuote.text}`);
+        }
+
+        init();
+    </script>
+</body>
+</html>
