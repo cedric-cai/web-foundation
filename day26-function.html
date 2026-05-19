@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 26：箭头函数 - 长方体体积计算器</title>
+    <style>
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        code {
+            background: #eef2ff;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        pre {
+            text-align: left;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 16px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📦 长方体体积计算器</h1>
+        <p>请按 <kbd>F12</kbd> 打开开发者工具，查看 <strong>Console（控制台）</strong> 输出。</p>
+        <p>✅ 包含功能：</p>
+        <ul style="text-align: left;">
+            <li>箭头函数 <code>calcVolume</code>（带默认参数）</li>
+            <li>普通函数声明版 <code>calcVolumeDeclaration</code>（可选挑战）</li>
+            <li>三次调用 + 控制台输出</li>
+            <li>对比两种写法的区别</li>
+        </ul>
+    </div>
+
+    <script>
+        // ========== 1. 箭头函数（带默认参数） ==========
+        // 简洁写法：函数体只有一行表达式时，可以省略 {} 和 return
+        const calcVolume = (length, width = 1, height = 1) => length * width * height;
+
+        // ========== 2. 普通函数声明版（可选挑战） ==========
+        function calcVolumeDeclaration(length, width = 1, height = 1) {
+            return length * width * height;
+        }
+
+        // ========== 输出结果 ==========
+        console.log('========== Day 26 函数练习 ==========');
+
+        // 调用1: 长 3, 宽 4, 高 5
+        const volume1 = calcVolume(3, 4, 5);
+        console.log(`📐 长方体的体积是：${volume1} (长3,宽4,高5)`);
+
+        // 调用2: 长 2.5, 宽 3, 高 4
+        const volume2 = calcVolume(2.5, 3, 4);
+        console.log(`📐 长方体的体积是：${volume2} (长2.5,宽3,高4)`);
+
+        // 调用3: 只有长 10，宽和高使用默认值 1
+        const volume3 = calcVolume(10);
+        console.log(`📐 长方体的体积是：${volume3} (长10, 宽和高使用默认值1)`);
+
+        // ========== 可选挑战：对比两种写法 ==========
+        console.log('\n========== 可选挑战：普通函数声明版 ==========');
+        const volDecl1 = calcVolumeDeclaration(3, 4, 5);
+        const volDecl2 = calcVolumeDeclaration(2.5, 3, 4);
+        const volDecl3 = calcVolumeDeclaration(10);
+        console.log(`📐 普通函数版 - 体积1: ${volDecl1}, 体积2: ${volDecl2}, 体积3: ${volDecl3}`);
+
+        console.log('\n📝 箭头函数 vs 普通函数声明的主要区别：');
+        console.log('1. 语法简洁：箭头函数省略 function 关键字，单行表达式可省略 {} 和 return');
+        console.log('2. this 绑定：箭头函数没有自己的 this，继承外层作用域；普通函数有自己的 this');
+        console.log('3. 构造函数：箭头函数不能作为构造函数（不能用 new），普通函数可以');
+        console.log('4. arguments 对象：箭头函数没有自己的 arguments，普通函数有');
+        console.log('5. 适用场景：箭头函数适合简单逻辑、回调函数；普通函数适合需要动态 this 或构造器的场景');
+    </script>
+</body>
+</html>
