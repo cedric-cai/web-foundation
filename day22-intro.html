@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 22：变量与数据类型 - 个人信息输出</title>
+    <style>
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 500px;
+        }
+        code {
+            background: #eef2ff;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📜 Day 22 练习：控制台输出个人信息</h1>
+        <p>请按 <kbd>F12</kbd> 打开开发者工具，切换到 <strong>Console（控制台）</strong> 面板查看输出结果。</p>
+        <hr>
+        <p>✅ 本页面已包含以下操作：</p>
+        <ul style="text-align: left; display: inline-block;">
+            <li>使用 <code>let</code> / <code>const</code> 声明变量</li>
+            <li>计算明年年龄</li>
+            <li>模板字符串拼接信息</li>
+            <li><code>console.log()</code> 输出</li>
+            <li>输出变量类型（<code>typeof</code>）</li>
+        </ul>
+    </div>
+
+    <script>
+        // 1. 变量声明（请替换成你自己的信息）
+        const name = '阿来';          // 字符串 - 常量（不会改变）
+        let age = 25;                 // 数字 - 可变（明年会增加）
+        const city = '深圳';          // 字符串 - 常量
+
+        // 2. 计算明年的年龄（不加引号，保持数字类型）
+        let nextYearAge = age + 1;
+
+        // 3. 使用模板字符串拼接信息
+        const message = `我是${name}，明年${nextYearAge}岁，来自${city}。`;
+
+        // 4. 输出到控制台
+        console.log(message);
+
+        // 可选：输出变量的数据类型
+        console.log('姓名类型：', typeof name);   // string
+        console.log('年龄类型：', typeof age);     // number
+        console.log('城市类型：', typeof city);    // string
+        console.log('明年年龄类型：', typeof nextYearAge); // number
+    </script>
+</body>
+</html>
