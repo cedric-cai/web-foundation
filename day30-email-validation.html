@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 30：邮箱格式验证器 | 表单验证 + 正则表达式</title>
+    <style>
+        /* ========== CSS 变量 ========== */
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-light: #e2e8f0;
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        /* 卡片容器 */
+        .validator {
+            background: white;
+            border-radius: 32px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .validator__title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .validator__sub {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 1rem;
+        }
+
+        /* 表单组 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group__label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-group__label span {
+            color: var(--danger);
+        }
+
+        /* 输入框 */
+        .form-group__input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group__input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* 无效样式（动态添加） */
+        .form-group__input.invalid {
+            border-color: var(--danger);
+            background-color: var(--danger-light);
+        }
+
+        /* 错误提示 */
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.85rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(0.98);
+        }
+
+        /* 正则说明 */
+        .regex-hint {
+            background: #f1f5f9;
+            padding: 0.8rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .regex-hint code {
+            background: #e2e8f0;
+            padding: 0.2rem 0.4rem;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="validator">
+        <h1 class="validator__title">📧 邮箱格式验证器</h1>
+        <p class="validator__sub">正则表达式 + 实时表单验证</p>
+
+        <div class="form-group">
+            <label for="email" class="form-group__label">
+                邮箱地址 <span>*</span>
+            </label>
+            <input type="email" 
+                   id="email" 
+                   class="form-group__input" 
+                   placeholder="example@domain.com"
+                   autocomplete="off">
+            <div class="error-message" id="errorMsg">
+                ⚠️ 请输入有效的邮箱地址（例如：name@example.com）
+            </div>
+        </div>
+
+        <button class="submit-btn" id="submitBtn">验证并提交</button>
+
+        <div class="regex-hint">
+            📖 当前正则规则：<code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code><br>
+            💡 解释：以非空格非@字符开头 → @ → 非空格非@字符 → . → 非空格非@字符结尾
+        </div>
+    </div>
+
+    <script>
+        // ========== DOM 元素 ==========
+        const emailInput = document.getElementById('email');
+        const errorMsg = document.getElementById('errorMsg');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // ========== 正则表达式（基础邮箱验证） ==========
+        // 解释：
+        // ^           -> 字符串开头
+        // [^\s@]+     -> 一个或多个非空格、非@的字符（邮箱名称）
+        // @           -> 匹配 @ 符号
+        // [^\s@]+     -> 一个或多个非空格、非@的字符（域名主体）
+        // \.          -> 匹配点号（转义）
+        // [^\s@]+     -> 一个或多个非空格、非@的字符（域名后缀，如 com/cn）
+        // $           -> 字符串结尾
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // ========== 核心验证函数 ==========
+        // 返回值: true=验证通过, false=验证失败
+        function validateEmail(value) {
+            if (!value || value.trim() === '') {
+                return false;
+            }
+            return emailRegex.test(value);
+        }
+
+        // 更新界面的验证反馈（根据验证结果动态修改样式 + 错误消息）
+        function updateValidationFeedback() {
+            const emailValue = emailInput.value;
+            const isValid = validateEmail(emailValue);
+
+            if (isValid) {
+                // 验证通过：移除无效样式，隐藏错误消息
+                emailInput.classList.remove('invalid');
+                errorMsg.classList.remove('show');
+                return true;
+            } else {
+                // 验证失败：添加无效样式，显示错误消息
+                emailInput.classList.add('invalid');
+                errorMsg.classList.add('show');
+                return false;
+            }
+        }
+
+        // ========== 清除错误反馈（用于 input 实时优化体验） ==========
+        // 不清除样式，只是视觉上让错误消息消失，让用户继续输入时不再被红框干扰
+        function clearValidationFeedback() {
+            // 只移除错误提示，但保留样式（等失去焦点或提交时再严格验证）
+            // 这里采用更友好的做法：移除 invalid 类和隐藏错误消息
+            emailInput.classList.remove('invalid');
+            errorMsg.classList.remove('show');
+        }
+
+        // ========== 焦点事件处理 ==========
+        // blur（失去焦点）：进行严格验证，显示错误反馈
+        function handleBlur() {
+            updateValidationFeedback();
+            const isValid = validateEmail(emailInput.value);
+            console.log(`📧 失去焦点验证，邮箱: "${emailInput.value}"，结果: ${isValid ? '✅ 有效' : '❌ 无效'}`);
+        }
+
+        // focus（获取焦点）：仅作控制台记录，不做样式清除（让用户知道当前在编辑）
+        function handleFocus() {
+            console.log(`🔍 邮箱输入框获得焦点，当前值: "${emailInput.value}"`);
+        }
+
+        // input（实时输入）：如果之前有错误提示，自动清除样式（给用户即时反馈）
+        function handleInput() {
+            // 只要用户开始输入，就先清除错误样式（体验优化）
+            // 注意：不清除样式也可以，但会让用户感觉“一直在报错”，所以这里清除
+            if (emailInput.classList.contains('invalid') || errorMsg.classList.contains('show')) {
+                emailInput.classList.remove('invalid');
+                errorMsg.classList.remove('show');
+                console.log('✏️ 用户正在输入，已临时清除错误提示');
+            }
+        }
+
+        // ========== 提交按钮验证 ==========
+        function handleSubmit() {
+            const emailValue = emailInput.value;
+            const isValid = validateEmail(emailValue);
+
+            // 无论是否失焦，都进行一次完整验证并更新界面样式
+            // 先调用 updateValidationFeedback 保证界面样式同步
+            const finalIsValid = updateValidationFeedback();
+
+            if (finalIsValid) {
+                alert(`✅ 验证通过！\n邮箱地址：${emailValue}`);
+                console.log(`📨 提交验证通过: ${emailValue}`);
+            } else {
+                alert(`❌ 验证失败！\n“${emailValue || '(空)'}” 不是有效的邮箱地址。\n请按格式填写，例如：name@example.com`);
+                console.log(`❌ 提交验证失败: ${emailValue || '(空)'}`);
+                // 额外聚焦到输入框，方便用户修改
+                emailInput.focus();
+            }
+        }
+
+        // ========== 绑定事件 ==========
+        emailInput.addEventListener('blur', handleBlur);
+        emailInput.addEventListener('focus', handleFocus);
+        emailInput.addEventListener('input', handleInput);
+        submitBtn.addEventListener('click', handleSubmit);
+
+        // 页面加载完成后的初始化提示
+        console.log('========== Day 30 邮箱验证器已启动 ==========');
+        console.log('✅ 正则表达式:', emailRegex);
+        console.log('📌 blur验证 / input自动清除错误 / 提交按钮完整验证');
+        console.log('💡 测试邮箱格式: test@example.com');
+    </script>
+</body>
+</html>
