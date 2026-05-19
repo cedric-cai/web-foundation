@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 33：Todo List 模块化重构 | 解构 + 扩展运算符</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .todo-app {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 550px;
+            padding: 1.8rem;
+        }
+
+        .todo-app__title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.25rem;
+        }
+
+        .todo-app__sub {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+        }
+
+        .badge {
+            background: #e0e7ff;
+            color: #4f46e5;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .todo-input {
+            flex: 1;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 60px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .todo-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .todo-input--error {
+            border-color: #ef4444;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .btn {
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn--primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn--primary:hover {
+            background: #5a67d8;
+            transform: scale(0.98);
+        }
+
+        .btn--outline {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+        }
+
+        .btn--outline:hover {
+            background: #f1f5f9;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .todo-list {
+            list-style: none;
+            margin: 0 0 1rem 0;
+            padding: 0;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.6rem;
+            border-radius: 60px;
+            transition: all 0.2s;
+            gap: 0.8rem;
+        }
+
+        .todo-item:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+
+        .todo-text {
+            flex: 1;
+            cursor: pointer;
+            font-size: 0.95rem;
+            word-break: break-word;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .todo-text--completed {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: all 0.2s;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .clear-btn {
+            width: 100%;
+            background: #f1f5f9;
+            color: #64748b;
+            margin-top: 0.5rem;
+            padding: 0.7rem;
+        }
+
+        .clear-btn:hover {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .empty-tip {
+            text-align: center;
+            color: #cbd5e1;
+            padding: 2rem;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 500px) {
+            .todo-app {
+                padding: 1.2rem;
+            }
+            .input-group {
+                flex-direction: column;
+            }
+            .btn--primary {
+                padding: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="todo-app">
+        <h1 class="todo-app__title">✅ Todo List</h1>
+        <p class="todo-app__sub">模块化重构 · 解构赋值 · 扩展运算符</p>
+        <div class="badge">📦 数据层 + 视图层 分离</div>
+
+        <div class="input-group">
+            <input type="text" id="todoInput" class="todo-input" placeholder="写一个待办事项..." autocomplete="off">
+            <button id="addBtn" class="btn btn--primary">➕ 添加</button>
+        </div>
+
+        <div class="stats-bar">
+            <span>📋 总计: <span id="totalCount">0</span> 项</span>
+            <span>✅ 已完成: <span id="completedCount">0</span> 项</span>
+        </div>
+
+        <ul id="todoListContainer" class="todo-list">
+            <li class="empty-tip">✨ 暂无待办，添加一条吧～</li>
+        </ul>
+
+        <button id="clearAllBtn" class="btn btn--outline clear-btn">🗑️ 清空全部</button>
+    </div>
+
+    <!-- 引入模块化 JS（顺序很重要：数据层 → UI层 → 主控） -->
+    <script src="todoData.js"></script>
+    <script src="todoUI.js"></script>
+    <script>
+        // ========== 主控脚本：组装数据层和视图层 ==========
+        
+        // 当前数据状态
+        let currentTodos = [];
+
+        // 初始化：加载数据并渲染
+        function init() {
+            // 从数据层加载
+            currentTodos = loadTodos();
+            // 渲染视图
+            renderTodoList(currentTodos);
+            // 更新统计
+            const stats = getStats(currentTodos);
+            updateStatsDisplay(stats);
+
+            // 绑定添加事件
+            bindControlEvents(() => {
+                const inputValue = getInputValue();
+                if (!inputValue || inputValue.trim() === '') {
+                    showInputError();
+                    console.warn('⚠️ 添加失败：输入内容为空');
+                    return;
+                }
+                // 使用扩展运算符：数据层返回新数组
+                const newTodos = addTodo(currentTodos, inputValue);
+                if (newTodos !== currentTodos) {
+                    currentTodos = newTodos;
+                    saveTodos(currentTodos);
+                    renderTodoList(currentTodos);
+                    const newStats = getStats(currentTodos);
+                    updateStatsDisplay(newStats);
+                    clearInputAndFocus();
+                }
+            });
+
+            // 绑定删除和切换事件（事件委托）
+            bindEvents({
+                onDelete: (id) => {
+                    // 使用 filter 返回新数组
+                    const newTodos = deleteTodo(currentTodos, id);
+                    currentTodos = newTodos;
+                    saveTodos(currentTodos);
+                    renderTodoList(currentTodos);
+                    const newStats = getStats(currentTodos);
+                    updateStatsDisplay(newStats);
+                },
+                onToggle: (id) => {
+                    // 使用 map 返回新数组
+                    const newTodos = toggleComplete(currentTodos, id);
+                    currentTodos = newTodos;
+                    saveTodos(currentTodos);
+                    renderTodoList(currentTodos);
+                    const newStats = getStats(currentTodos);
+                    updateStatsDisplay(newStats);
+                }
+            });
+
+            // 绑定清空事件
+            bindClearEvent(() => {
+                currentTodos = clearAllTodos();
+                saveTodos(currentTodos);
+                renderTodoList(currentTodos);
+                const newStats = getStats(currentTodos);
+                updateStatsDisplay(newStats);
+                clearInputAndFocus();
+            });
+
+            console.log('========== Day 33 模块化 Todo List 已启动 ==========');
+            console.log('✅ 数据层 + 视图层分离');
+            console.log('✅ 使用解构赋值和扩展运算符');
+        }
+
+        // 启动应用
+        init();
+    </script>
+</body>
+</html>
