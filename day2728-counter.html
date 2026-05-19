@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 27-28：计数器 | DOM 操作入门</title>
+    <style>
+        /* ========== CSS 变量 ========== */
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --danger: #ef4444;
+            --danger-dark: #dc2626;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        /* 计数器卡片 */
+        .counter {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem 2rem 2.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .counter__title {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        /* 数字显示器 */
+        .counter__display {
+            background: var(--bg-light);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .counter__number {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: monospace;
+        }
+
+        /* 按钮组 */
+        .counter__buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            flex: 1;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn--primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn--primary:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        .btn--danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn--danger:hover {
+            background: var(--danger-dark);
+            transform: scale(1.02);
+        }
+
+        /* 提示区（用于 DOM 演示） */
+        .counter__info {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .counter {
+                padding: 1.5rem;
+            }
+            .counter__number {
+                font-size: 3rem;
+            }
+            .btn {
+                font-size: 1.2rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="counter">
+        <h2 class="counter__title">📱 交互计数器</h2>
+        <div class="counter__display">
+            <span class="counter__number" id="countValue">0</span>
+        </div>
+        <div class="counter__buttons">
+            <button class="btn btn--danger" id="decrementBtn">− 减</button>
+            <button class="btn btn--primary" id="incrementBtn">加 +</button>
+        </div>
+        <div class="counter__info" id="infoMessage">
+            💡 Day 27：界面已搭建。按 F12 → Console 查看 DOM 选择器演示
+        </div>
+    </div>
+
+    <script>
+    // ========== Day 27：DOM 选择器验证 ==========
+    const numberSpan = document.querySelector('#countValue');
+    const incrementBtn = document.querySelector('#incrementBtn');
+    const decrementBtn = document.querySelector('#decrementBtn');
+    const infoDiv = document.querySelector('#infoMessage');
+
+    console.log('========== Day 27 DOM 选择器验证 ==========');
+    console.log('✅ 通过 querySelector 选中 #countValue:', numberSpan);
+    console.log('📝 当前数字显示的内容：', numberSpan.innerText);
+    console.log('➕ 加号按钮:', incrementBtn);
+    console.log('➖ 减号按钮:', decrementBtn);
+    infoDiv.innerText = '✅ Day 28 完成：加减功能已实现！点击按钮试试看 👇';
+
+    // ========== Day 28：事件绑定 + 交互逻辑 ==========
+    // 当前计数值（从 DOM 中读取初始值）
+    let count = 0;
+
+    // 更新显示的函数
+    function updateDisplay() {
+        numberSpan.innerText = count;
+    }
+
+    // 加号按钮点击事件
+    function handleIncrement() {
+        count = count + 1;
+        updateDisplay();
+        console.log(`➕ 点击加号，当前计数：${count}`);
+    }
+
+    // 减号按钮点击事件（不能小于 0）
+    function handleDecrement() {
+        if (count > 0) {
+            count = count - 1;
+            updateDisplay();
+            console.log(`➖ 点击减号，当前计数：${count}`);
+        } else {
+            console.log('⚠️ 计数已经为 0，不能再减了！');
+            // 可选：临时改变提示文字（演示 DOM 修改）
+            infoDiv.innerText = '⚠️ 计数不能小于 0！点击加号增加吧～';
+            setTimeout(() => {
+                infoDiv.innerText = '✅ Day 28 完成：加减功能已实现！点击按钮试试看 👇';
+            }, 1000);
+        }
+    }
+
+    // 绑定事件
+    incrementBtn.addEventListener('click', handleIncrement);
+    decrementBtn.addEventListener('click', handleDecrement);
+
+    // 初始化显示
+    updateDisplay();
+    console.log('========== Day 28 事件绑定完成 ==========');
+    console.log('✅ 加号和减号按钮已绑定点击事件，计数不能小于 0');
+    </script>
+</body>
+</html>
