@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 24：数组的 map 与 filter 练习</title>
+    <style>
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        code {
+            background: #eef2ff;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        pre {
+            text-align: left;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 16px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📚 数组练习：map + filter</h1>
+        <p>请按 <kbd>F12</kbd> 打开开发者工具，查看 <strong>Console（控制台）</strong> 输出。</p>
+        <p>✅ 操作：</p>
+        <ul style="text-align: left;">
+            <li>原始数组：<code>[1, 5, 2, 8, 10]</code></li>
+            <li>使用 <code>map</code> 将每个元素 ×2 → 新数组</li>
+            <li>使用 <code>filter</code> 从上一步结果中选出 >10 的数</li>
+            <li>（可选挑战）链式调用一行完成</li>
+        </ul>
+    </div>
+
+    <script>
+        // 原始数组
+        const numbers = [1, 5, 2, 8, 10];
+
+        // 1. 使用 map 生成加倍数组
+        const doubled = numbers.map(function(num) {
+            return num * 2;
+        });
+        // 更简洁的箭头函数写法：
+        // const doubled = numbers.map(num => num * 2);
+
+        // 2. 使用 filter 从 doubled 中选出大于 10 的数
+        const filtered = doubled.filter(num => num > 10);
+
+        // 3. 输出结果
+        console.log('========== Day 24 数组操作 ==========');
+        console.log('原始数组:', numbers);
+        console.log('加倍后的数组:', doubled);
+        console.log('过滤后（大于10）:', filtered);
+
+        // 可选挑战：链式调用（一行完成）
+        const chainedResult = numbers.map(num => num * 2).filter(num => num > 10);
+        console.log('\n✨ 链式调用结果（一行代码）:', chainedResult);
+    </script>
+</body>
+</html>
