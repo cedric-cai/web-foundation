@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 25：对象与 this 初步 - 手机对象</title>
+    <style>
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        code {
+            background: #eef2ff;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        pre {
+            text-align: left;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 16px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📱 手机对象练习</h1>
+        <p>请按 <kbd>F12</kbd> 打开开发者工具，查看 <strong>Console（控制台）</strong> 输出。</p>
+        <p>✅ 包含功能：</p>
+        <ul style="text-align: left;">
+            <li>定义 <code>phone</code> 对象（品牌、型号、价格、颜色）</li>
+            <li>方法 <code>call(person)</code> 输出“正在呼叫...”</li>
+            <li>方法 <code>info()</code> 使用 <code>this</code> 输出完整信息</li>
+            <li>使用 <code>for...in</code> 遍历属性（过滤方法）</li>
+        </ul>
+    </div>
+
+    <script>
+        // 定义手机对象
+        const phone = {
+            // 属性
+            brand: '华为',
+            model: 'Mate 60',
+            price: 5999,
+            color: '雅丹黑',
+
+            // 方法：呼叫某人
+            call(person) {
+                console.log(`📞 正在呼叫 ${person}...`);
+            },
+
+            // 方法：使用 this 输出完整信息
+            info() {
+                console.log(`📱 本机是 ${this.brand} ${this.model}，价格 ${this.price} 元，颜色 ${this.color}`);
+            }
+        };
+
+        // 控制台输出
+        console.log('========== Day 25 对象练习 ==========');
+
+        // 调用 info() 输出手机信息
+        phone.info();
+
+        // 调用 call() 模拟通话
+        phone.call('老师');
+
+        // 可选：使用 for...in 遍历输出所有属性（不含方法）
+        console.log('\n📋 手机所有属性（不含方法）:');
+        for (let key in phone) {
+            // 过滤掉方法（只输出属性）
+            if (typeof phone[key] !== 'function') {
+                console.log(`  ${key}: ${phone[key]}`);
+            }
+        }
+    </script>
+</body>
+</html>
