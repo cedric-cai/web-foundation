@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Day 36：倒计时秒表 | 定时器实战</title>
+    <style>
+        /* ========== CSS 变量 ========== */
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+            --radius-lg: 32px;
+            --radius-md: 20px;
+            --transition: 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Noto Sans CJK SC', monospace;
+            background: linear-gradient(135deg, var(--primary) 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        /* 主容器 */
+        .stopwatch {
+            max-width: 550px;
+            width: 100%;
+        }
+
+        /* 卡片组件 */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(2px);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card__header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card__title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .card__sub {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        /* 计时显示器 */
+        .timer-display {
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .timer-display__time {
+            font-size: 3.5rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            color: var(--primary);
+            letter-spacing: 4px;
+            word-break: break-word;
+        }
+
+        /* 按钮组 */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn--start {
+            background: var(--success);
+            color: white;
+        }
+        .btn--start:hover {
+            background: #0e9f6e;
+            transform: scale(1.02);
+        }
+
+        .btn--pause {
+            background: var(--warning);
+            color: white;
+        }
+        .btn--pause:hover {
+            background: #d97706;
+            transform: scale(1.02);
+        }
+
+        .btn--reset {
+            background: var(--danger);
+            color: white;
+        }
+        .btn--reset:hover {
+            background: #dc2626;
+            transform: scale(1.02);
+        }
+
+        .btn--lap {
+            background: var(--primary);
+            color: white;
+        }
+        .btn--lap:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        /* 圈次记录区域 */
+        .lap-section {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .lap-section__title {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lap-list {
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .lap-list__item {
+            background: #f1f5f9;
+            padding: 0.6rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-family: monospace;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .lap-list__item span:first-child {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .lap-list__item span:last-child {
+            color: var(--text-dark);
+        }
+
+        .lap-empty {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.75rem;
+            padding: 1rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 500px) {
+            .card {
+                padding: 1.5rem;
+            }
+            .timer-display__time {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch">
+        <div class="card">
+            <div class="card__header">
+                <h1 class="card__title">⏱️ 专业秒表</h1>
+                <p class="card__sub">精确到毫秒 · 圈次记录</p>
+            </div>
+
+            <!-- 时间显示屏 -->
+            <div class="timer-display">
+                <div class="timer-display__time" id="timeDisplay">00:00.000</div>
+            </div>
+
+            <!-- 按钮组 -->
+            <div class="button-group">
+                <button id="startBtn" class="btn btn--start">▶ 开始</button>
+                <button id="pauseBtn" class="btn btn--pause">⏸ 暂停</button>
+                <button id="resetBtn" class="btn btn--reset">🔄 重置</button>
+                <button id="lapBtn" class="btn btn--lap">⏱️ 计圈</button>
+            </div>
+
+            <!-- 圈次记录 -->
+            <div class="lap-section">
+                <div class="lap-section__title">
+                    📋 圈次记录
+                </div>
+                <ul id="lapList" class="lap-list">
+                    <li class="lap-empty">暂无圈次，点击「计圈」记录</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== DOM 元素 ==========
+        const timeDisplay = document.getElementById('timeDisplay');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const lapBtn = document.getElementById('lapBtn');
+        const lapListEl = document.getElementById('lapList');
+
+        // ========== 计时变量 ==========
+        let timerId = null;          // setInterval 句柄
+        let elapsedMs = 0;           // 累计毫秒数（从 0 开始）
+        let isRunning = false;       // 是否正在计时
+
+        // ========== 辅助函数：格式化时间（毫秒 → 00:00.000） ==========
+        function formatTime(ms) {
+            if (ms < 0) ms = 0;
+            const minutes = Math.floor(ms / 60000);
+            const seconds = Math.floor((ms % 60000) / 1000);
+            const milliseconds = ms % 1000;
+            // 使用 padStart 补零
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
+        }
+
+        // 更新界面时间显示
+        function updateDisplay() {
+            timeDisplay.textContent = formatTime(elapsedMs);
+        }
+
+        // ========== 计时核心逻辑（每 10ms 更新一次） ==========
+        function tick() {
+            elapsedMs += 10;       // 每次增加 10ms
+            updateDisplay();
+        }
+
+        // ========== 开始计时（处理并发，先清除旧的定时器） ==========
+        function startTimer() {
+            if (isRunning) {
+                console.warn('⏰ 计时器已在运行中，请勿重复点击开始');
+                return;
+            }
+            // 关键：如果已经有定时器，先清除（防止多个定时器并发）
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+            }
+            timerId = setInterval(tick, 10);
+            isRunning = true;
+            console.log('✅ 秒表开始计时');
+        }
+
+        // ========== 暂停计时 ==========
+        function pauseTimer() {
+            if (!isRunning) {
+                console.warn('⏸ 秒表未运行，无需暂停');
+                return;
+            }
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+            }
+            isRunning = false;
+            console.log('⏸ 秒表已暂停，当前时间:', formatTime(elapsedMs));
+        }
+
+        // ========== 重置计时 ==========
+        function resetTimer() {
+            // 如果正在计时，先停止计时
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+            }
+            isRunning = false;
+            elapsedMs = 0;
+            updateDisplay();
+            // 清空圈次记录
+            clearLaps();
+            console.log('🔄 秒表已重置，圈次记录已清空');
+        }
+
+        // ========== 圈次记录 ==========
+        let lapCounter = 0;
+        function recordLap() {
+            if (!isRunning && elapsedMs === 0) {
+                // 未开始或重置后且未计时，提示但不记录
+                console.warn('⏱️ 请先开始计时再计圈');
+                // 视觉反馈：可短暂显示提示，但不强制
+                const tempMsg = document.querySelector('.lap-empty');
+                if (tempMsg && lapListEl.children.length === 0) {
+                    const originalText = tempMsg.textContent;
+                    tempMsg.textContent = '请先开始计时～';
+                    setTimeout(() => {
+                        if (lapListEl.children.length === 0) {
+                            tempMsg.textContent = originalText;
+                        }
+                    }, 800);
+                }
+                return;
+            }
+            if (!isRunning && elapsedMs > 0) {
+                // 暂停状态下也可以计圈（记录当前时间）
+                console.log(`⏱️ 计圈（暂停状态）: ${formatTime(elapsedMs)}`);
+            }
+            lapCounter++;
+            const currentTime = formatTime(elapsedMs);
+            addLapToList(lapCounter, currentTime);
+            console.log(`⏱️ 计圈 #${lapCounter}: ${currentTime}`);
+        }
+
+        // 添加圈次到列表
+        function addLapToList(number, timeStr) {
+            // 移除空状态提示（如果存在）
+            if (lapListEl.children.length === 1 && lapListEl.children[0].classList?.contains('lap-empty')) {
+                lapListEl.innerHTML = '';
+            }
+            const li = document.createElement('li');
+            li.className = 'lap-list__item';
+            li.innerHTML = `<span>#${number}</span><span>${timeStr}</span>`;
+            // 最新圈次显示在顶部（更符合体育秒表习惯）
+            lapListEl.insertBefore(li, lapListEl.firstChild);
+        }
+
+        // 清空圈次列表
+        function clearLaps() {
+            lapCounter = 0;
+            lapListEl.innerHTML = '<li class="lap-empty">暂无圈次，点击「计圈」记录</li>';
+        }
+
+        // ========== 额外安全机制：页面卸载时清除定时器 ==========
+        function cleanup() {
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+            }
+        }
+
+        // ========== 事件绑定 ==========
+        function bindEvents() {
+            startBtn.addEventListener('click', startTimer);
+            pauseBtn.addEventListener('click', pauseTimer);
+            resetBtn.addEventListener('click', resetTimer);
+            lapBtn.addEventListener('click', recordLap);
+        }
+
+        // ========== 初始化 ==========
+        function init() {
+            bindEvents();
+            updateDisplay();
+            // 页面关闭前清除定时器，避免后台运行
+            window.addEventListener('beforeunload', cleanup);
+            console.log('========== Day 36 秒表已启动 ==========');
+            console.log('✅ 支持开始/暂停/重置/计圈，精确到毫秒');
+            console.log('💡 提示：点击「开始」启动计时，「计圈」可记录当前时间');
+        }
+
+        init();
+    </script>
+</body>
+</html>
